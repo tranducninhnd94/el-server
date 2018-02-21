@@ -32,5 +32,40 @@ module.exports = {
             example: word.example,
             topic: word.topic
         }
+    },
+    userResponse: (user) => {
+        return {
+            _id: user._id,
+
+            fullname: user.fullname ? user.fullname : null,
+
+            gender: user.gender ? user.gender : null,
+
+            email: user.email ? user.email : null,
+
+            position: user.position ? user.position : null,
+
+            avatar_url: user.avatar_url ? user.avatar_url : null,
+
+            description: user.description ? user.description : null,
+
+            role: user.role ? user.role : null,
+
+            location: user.location ? user.location : null,
+
+            graduation: user.graduation ? user.graduation : null,
+
+            department: user.department ? user.department : null,
+
+            job: user.job ? user.job : null,
+
+            skill: user.skill ? user.skill : null,
+
+            phone_number: user.phone_number ? user.phone_number : null,
+
+            birthday: user.birthday ? user.birthday : null,
+
+            create_at: user.create_at ? user.create_at : null
+        }
     }
 }

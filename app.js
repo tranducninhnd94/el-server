@@ -6,6 +6,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var fs = require('fs');
+var swaggerUi = require('swagger-ui-express');
+var swaggerDocument = require('./swagger/swagger.json');
 // var cors = require('cors');
 
 // log (using winston)
@@ -42,9 +44,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 var topicRouter = require('./routes/topic.router');
 var wordRouter = require('./routes/word.router');
 var authRouter = require('./routes/auth.router');
+var userRouter = require('./routes/user.router');
 app.use(topicRouter);
 app.use(wordRouter);
 app.use(authRouter);
+app.use(userRouter);
+
+//swagger
+app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
 

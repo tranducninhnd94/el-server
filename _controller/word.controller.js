@@ -11,7 +11,6 @@ module.exports = {
         let arrwords = body.words;
 
         topicService.findByName(nameTopic).then(topic => {
-
             if (topic) {
                 let idTopic = topic._id;
 

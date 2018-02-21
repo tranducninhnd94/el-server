@@ -1,0 +1,132 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Application API",
+        "description": "Application API",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:8000",
+    "basePath": "",
+    "tags": [
+        {
+            "description": "API for users in the system"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/word/list/all": {
+            "get": {
+                "tags": [
+                    "Word"
+                ],
+                "description": "Get details words",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "get sucess",
+                        "schema": {
+                            "$ref": "#/definitions/StandardResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/login": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "description": "login",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "login requesst",
+                        "schema": {
+                            "$ref": "#/definitions/LoginRequest"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "login sucess",
+                        "schema": {
+                            "$ref": "#/definitions/LoginResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "StandardResponse": {
+            "properties": {
+                "result": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "error": {
+                    "type": "array"
+                }
+            }
+        },
+        "LoginRequest": {
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "LoginResponse": {
+            "properties": {
+                "token": {
+                    "type": "string"
+                },
+                "infor": {
+                    "type": "array",
+                    "$ref": "#/definitions/Infor"
+                }
+            }
+        },
+        "Infor": {
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "fullname": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "avatar_url": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,53 @@
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T14:57:26.186Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T15:00:43.857Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T15:11:37.351Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T15:12:02.275Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T15:12:24.990Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T15:15:43.233Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T15:16:12.951Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T15:17:13.393Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T15:20:24.936Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T16:04:39.533Z"}
+{"fullname":"Trần Đức Ninh","email":"tranducninhnd94@hotmail.com","password":"1234","confirmPassword":"1234","gender":"Male","avatar_url":"image/default_img.jpg","position":"User","level":"info","message":"USER_CONTROLLER create new user : {} ","timestamp":"2018-02-21T16:05:11.670Z"}
+{"fullname":"Trần Đức Ninh","email":"tranducninhnd94@hotmail.com","password":"1234","confirmPassword":"1234","gender":"Male","avatar_url":"image/default_img.jpg","position":"User","level":"info","message":"USER_CONTROLLER create new user : {} ","timestamp":"2018-02-21T16:07:11.633Z"}
+{"fullname":"Trần Đức Ninh","email":"tranducninhnd94@hotmail.com","password":"1234","confirmPassword":"1234","gender":"Male","avatar_url":"image/default_img.jpg","position":"User","level":"info","message":"USER_CONTROLLER create new user : {} ","timestamp":"2018-02-21T16:09:26.979Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"12345","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T16:11:37.264Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"1234","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T16:12:21.585Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"1234","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T16:12:27.101Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"1234","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T16:13:17.376Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"1234","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T16:14:17.510Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"1234","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T16:14:49.014Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"1234","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T16:15:09.466Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"12345","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T16:15:19.171Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"12345","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T16:15:36.615Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T16:31:22.615Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T16:35:00.957Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"1234","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T16:35:23.550Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T16:36:16.849Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"1234","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T16:36:30.700Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"12345","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T16:36:44.102Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"1234","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T16:36:47.945Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T16:47:26.494Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T16:49:43.053Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"1234","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T16:50:21.215Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"1234","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T16:50:41.390Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T16:58:52.391Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T16:59:32.071Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T17:00:01.226Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T17:00:07.853Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T17:00:15.088Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T17:00:38.704Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T17:05:07.205Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T17:06:13.302Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T17:06:46.746Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T17:07:21.113Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T17:07:25.224Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T17:07:47.684Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T17:08:42.948Z"}
+{"path":"/word/5a66bb4703da6d18183ab8e5","level":"info","message":"WORD_CONTROLLER","timestamp":"2018-02-21T17:11:35.488Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"1234","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T17:11:59.327Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"1234","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T17:16:57.590Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"1234","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T17:17:58.731Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"1234","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T17:20:23.481Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"1234","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T17:27:39.114Z"}
+{"email":"tranducninhnd94@hotmail.com","password":"1234","level":"error","message":"USER_CONTROLLER Login with info { } ","timestamp":"2018-02-21T17:28:39.759Z"}
