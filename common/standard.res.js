@@ -67,5 +67,21 @@ module.exports = {
 
             create_at: user.create_at ? user.create_at : null
         }
+    },
+    fileResponse: (file) => {
+        return {
+            path: file.path.substring(7),   //igrone 'public/'
+            mimetype: file.mimetype,
+            size: file.size,
+            originalname: file.originalname,
+            encoding: file.encoding,
+            filename: file.filename
+        }
+    },
+    arrResponse: (ttl, val) => {
+        return {
+            total: ttl,
+            list: val
+        }
     }
 }

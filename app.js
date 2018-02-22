@@ -45,10 +45,12 @@ var topicRouter = require('./routes/topic.router');
 var wordRouter = require('./routes/word.router');
 var authRouter = require('./routes/auth.router');
 var userRouter = require('./routes/user.router');
+var fileRouter = require('./routes/file.router');
 app.use(topicRouter);
 app.use(wordRouter);
 app.use(authRouter);
 app.use(userRouter);
+app.use(fileRouter);
 
 //swagger
 app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
