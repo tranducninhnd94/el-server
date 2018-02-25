@@ -68,6 +68,9 @@ var UserSchema = new Schema({
 		type: Date
 	},
 
+	current_token: {
+		type: String
+	},
 	create_at: {
 		type: Date
 	}

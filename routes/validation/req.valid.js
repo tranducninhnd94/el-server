@@ -1,4 +1,5 @@
 var Joi = require('joi');
+// Joi.objectId = require('joi-objectid')(Joi);
 
 module.exports = {
     userInsert: {
@@ -14,5 +15,37 @@ module.exports = {
     userLogin: {
         email: Joi.string().email().max(45).required(),
         password: Joi.string().alphanum().required()
-    }
+    },
+
+    postInsert: {
+        body: {
+            title: Joi.string().max(100).min(1).required(),
+            content: Joi.string().max(5000).min(1).required(),
+            file_upload: Joi.array().default([]),
+            status: Joi.string().only('SHOW', 'HIDDEN').default('SHOW')
+        }
+    },
+    postUpdate: {
+        body: {
+            title: Joi.string().max(100).min(1).required(),
+            content: Joi.string().max(5000).min(1).required(),
+            file_upload: Joi.array().default([]),
+            status: Joi.string().only('SHOW', 'HIDDEN').default('SHOW')
+        }
+    },
+
+    postFind: {
+        query: {
+            title: Joi.string().alphanum(),
+            author: Joi.string().alphanum(),
+            createAt: Joi.date(),
+            pageNum: Joi.number().min(0).default(0),
+            pageSize: Joi.number().min(1).max(100).default(5),
+            sortBy: Joi.string().only('author', 'create_at').default('create_at'),
+            orderBy: Joi.string().only('asc', 'desc').default('desc')
+        }
+    },
+    postFindOne: {
+        // postId: Joi.objectId()
+    },
 }

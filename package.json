@@ -1,5 +1,5 @@
 {
-  "name": "el-server",
+  "name": "el-app",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -7,20 +7,22 @@
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "~1.18.2",
+    "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",
-    "debug": "~2.6.9",
-    "ejs": "~2.5.7",
-    "express": "~4.15.5",
+    "cors": "^2.8.4",
+    "debug": "~2.6.3",
+    "ejs": "~2.5.6",
+    "express": "~4.15.2",
     "express-validation": "^1.0.2",
     "joi": "^13.1.2",
     "mongoose": "^5.0.1",
-    "morgan": "~1.9.0",
+    "morgan": "^1.8.2",
     "node-uuid": "^1.4.8",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
     "promise": "^8.0.1",
-    "serve-favicon": "~2.4.5",
+    "redis": "^2.8.0",
+    "serve-favicon": "~2.4.2",
     "swagger-ui-express": "^2.0.15",
     "winston": "^2.4.0",
     "winston-daily-rotate-file": "^1.7.2",
@@ -29,6 +31,6 @@
     "mime": "^2.0.3"
   },
   "devDependencies": {
-    "nodemon": "^1.14.12"
+    "nodemon": "^1.15.1"
   }
 }

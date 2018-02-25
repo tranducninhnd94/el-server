@@ -9,8 +9,7 @@ module.exports = {
 		return new Promise((resolve, reject) => {
 			User.findOne({
 				email: emailReq
-			})
-			.exec((err, user) => {
+			}).exec((err, user) => {
 				if (err) return reject(err);
 				return resolve(user);
 			});
@@ -88,6 +87,17 @@ module.exports = {
 					return resolve(user);
 				}
 			);
+		});
+	},
+
+	updateCurrentToken: (email, token) => {
+		return new Promise((resolve, reject) => {
+			User.findOneAndUpdate({ email: email }, { current_token: token }, (error, result) => {
+				if (error) {
+					return reject(error);
+				}
+				return resolve(result);
+			});
 		});
 	}
 };
