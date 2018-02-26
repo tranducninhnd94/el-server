@@ -105,22 +105,47 @@ module.exports = {
 	//posts
 
 	postResponse: (post) => {
-        return {
-            _id: post._id,
+		return {
+			_id: post._id,
 
-            title: post.title,
+			title: post.title,
 
-            content: post.content,
+			content: post.content,
 
-            user: post.user,
+			user: post.user,
 
 			file_upload: post.file_upload ? post.file_upload : null,
-			
-			status: post.status ? post.status : null,
-			
-            create_at: post.create_at ? post.create_at : null,
 
-            update_at: post.update_at ? post.update_at : null
-        }
-    },
+			status: post.status ? post.status : null,
+
+			create_at: post.create_at ? post.create_at : null,
+
+			update_at: post.update_at ? post.update_at : null
+		}
+	},
+
+	// comment
+	commentResponse: (comment) => {
+		return {
+			_id: comment._id,
+
+			content: comment.content,
+
+			post: comment.post,
+
+			user: comment.user,
+
+			total_replies: comment.total_replies,
+
+			replies: comment.replies,
+
+			users_like: comment.users_like,
+
+			image_url: comment.image_url,
+
+			create_at: comment.create_at,
+
+			update_at: comment.update_at
+		}
+	},
 };

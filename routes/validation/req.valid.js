@@ -48,4 +48,31 @@ module.exports = {
     postFindOne: {
         // postId: Joi.objectId()
     },
+
+    // comment
+    commentInsert: {
+        body: {
+            content: Joi.string().min(1).max(500).required(),
+            image_url: Joi.array().default([]),
+            post: Joi.string().required(),  // post id
+            status: Joi.string().only('SHOW', 'HIDDEN').default('SHOW'),
+            replies: Joi.array().default([]),
+        }
+    },
+
+    commentUpdate: {
+        body: {
+            content: Joi.string().min(1).max(500).required(),
+            image_url: Joi.array().default([]),
+            post: Joi.string().required(),
+            status: Joi.string().only('SHOW', 'HIDDEN').default('SHOW')
+        }
+    },
+
+    commentFindByPost: {
+        query: {
+            pageNum: Joi.number().min(0).default(0),
+            pageSize: Joi.number().min(1).max(100).default(5),
+        }
+    }
 }

@@ -71,12 +71,14 @@ var authRouter = require("./routes/auth.router");
 var userRouter = require("./routes/user.router");
 var fileRouter = require("./routes/file.router");
 var postRouter = require("./routes/post.routes");
+var commentRouter = require("./routes/comment.router");
 app.use(topicRouter);
 app.use(wordRouter);
 app.use(authRouter);
 app.use(userRouter);
 app.use(fileRouter);
 app.use(postRouter);
+app.use(commentRouter);
 
 //swagger
 app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerDocument));

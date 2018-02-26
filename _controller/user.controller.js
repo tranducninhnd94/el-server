@@ -59,12 +59,12 @@ module.exports = {
 					let token = uuid.v4();
 					let objectResponse = {
 						token: token,
-						infor: null
+						info: null
 					};
 					let ObjectSuccess = standardRes.objectSuccess(200, "SUCCESS", objectResponse);
 					return res.json(ObjectSuccess);
 				} else {
-					logger.log("error", tag, "Email or passowrd is wrong !");
+					logger.log("error", TAG, "Email or passowrd is wrong !");
 					res.status(400);
 					let objectError = standardRes.objectError(400, "WRONG_EMAIL", "Email is wrong !");
 				}

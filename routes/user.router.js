@@ -6,8 +6,8 @@ var validation = require("express-validation");
 
 router
 	.post("/user", validation(reqvalid.userInsert), userController.createUser)
-	.post("/user/login", validation(reqvalid.userLogin), userController.login)
-	.post("/user/loginv2", validation(reqvalid.userLogin), userController.loginV2)
+	// .post("/user/login", validation(reqvalid.userLogin), userController.login)
+	.post("/user/login", validation(reqvalid.userLogin), userController.loginV2)
 	.get("/user/logout", userController.authenticate, userController.logout);
 
 module.exports = router;
