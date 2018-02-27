@@ -110,6 +110,8 @@ module.exports = {
 
 			title: post.title,
 
+			description: post.description,
+
 			content: post.content,
 
 			user: post.user,
