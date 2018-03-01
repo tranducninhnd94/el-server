@@ -1,7 +1,8 @@
 var postService = require('../_service/post.service'),
     userService = require('../_service/user.service'),
     standardRes = require('../common/standard.res'),
-    logger = require('../config/logger.config');
+    logger = require('../config/logger.config'),
+    fileUploadService = require("../_service/file-upload.service");
 
 var TAG = "POST_CONTROLLER";
 
@@ -12,6 +13,11 @@ module.exports = {
 
             let postReq = req.body;
             let emailUser = userInfo.email;
+            let fileNameUsed = req.body.fileNameUsed;
+
+            if (fileNameUsed){
+                
+            }
 
             logger.log("info", TAG, "Create new post {}", userInfo, postReq)
 

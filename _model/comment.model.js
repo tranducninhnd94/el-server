@@ -52,6 +52,14 @@ var CommentSchema = new Scheame({
                 ref: 'Post',
                 required: true
             },
+            users_like: [
+                {
+                    type: Scheame.Types.ObjectId,
+                    ref: 'User',
+                    required: true,
+                    default: []
+                },
+            ],
             status: {
                 type: String,
                 required: true,

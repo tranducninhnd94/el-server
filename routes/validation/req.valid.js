@@ -21,7 +21,7 @@ module.exports = {
         body: {
             title: Joi.string().max(200).min(1).required(),
             description: Joi.string().max(500).min(30).required(),
-            content: Joi.string().max(5000).min(1).required(),
+            content: Joi.string().max(100000).min(1).required(),
             file_upload: Joi.array().default([]),
             status: Joi.string().only('SHOW', 'HIDDEN').default('SHOW')
         }

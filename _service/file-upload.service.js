@@ -10,5 +10,19 @@ module.exports = {
 				return resovle(result);
 			});
 		});
+	},
+
+	updateIsUser: fileNameUsed => {
+		return new Promise((resolve, reject) => {
+			fileUploadSchema.updateMany(
+				{ originalname: { $in: fileNameUsed } },
+				{ is_used: true },
+				{ upsert: false },
+				(error, result) => {
+					if (error) return reject(error);
+					return resolve(result);
+				}
+			)
+		})
 	}
 };

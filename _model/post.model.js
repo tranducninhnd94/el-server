@@ -42,6 +42,11 @@ var PostSchema = new Schema({
         default: "SHOW"
     },
 
+    total_view:{
+        type: Number,
+        default: 0
+    },
+    
     create_at: {
         type: Date,
         default: Date.now()
