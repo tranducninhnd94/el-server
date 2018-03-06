@@ -126,6 +126,29 @@ module.exports = {
 		}
 	},
 
+	postBasicRequest: (postBase) => {
+		return {
+			_id: postBase._id,
+
+			title: postBase.title,
+
+			description: postBase.description,
+
+			user: postBase.user,
+
+			file_upload: postBase.file_upload ? postBase.file_upload : null,
+
+			total_comment: postBase.total_comment ? postBase.total_comment : 0,
+
+			total_view: postBase.total_view ? postBase.total_view : 0,
+
+			create_at: postBase.create_at ? postBase.create_at : null,
+
+			update_at: postBase.update_at ? postBase.update_at : null
+
+		}
+	},
+
 	// comment
 	commentResponse: (comment) => {
 		return {

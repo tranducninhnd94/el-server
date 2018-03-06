@@ -15,8 +15,8 @@ module.exports = {
             let emailUser = userInfo.email;
             let fileNameUsed = req.body.fileNameUsed;
 
-            if (fileNameUsed){
-                
+            if (fileNameUsed) {
+
             }
 
             logger.log("info", TAG, "Create new post {}", userInfo, postReq)
@@ -135,23 +135,67 @@ module.exports = {
     getOne: (req, res, next) => {
         let postId = req.params.postId;
         if (postId) {
-            postService.findOne(postId).then(post => {
-                if (post) {
-                    let postResponse = standardRes.postResponse(post);
-                    let objectSuccess = standardRes.objectSuccess(200, 'SUCCESS', postResponse);
-                    res.status(200);
-                    return res.json(objectSuccess);
-                } else {
-                    let objectSuccess = standardRes.objectSuccess(200, 'NO_OBJECT', {});
-                    res.status(200);
-                    return res.json(objectSuccess);
-                }
+            postService.updateTotalView(postId).then(result => {
+                console.log('update _ total_ view ', result);
+                postService.findOne(postId).then(post => {
+                    if (post) {
+                        let postResponse = standardRes.postResponse(post);
+                        let objectSuccess = standardRes.objectSuccess(200, 'SUCCESS', postResponse);
+                        res.status(200);
+                        return res.json(objectSuccess);
+                    } else {
+                        let objectSuccess = standardRes.objectSuccess(200, 'NO_OBJECT', {});
+                        res.status(200);
+                        return res.json(objectSuccess);
+                    }
+                }, error => {
+                    console.log(error);
+                    res.status(500);
+                    let objectError = standardRes.objectError(400, 'INTERNAL_SERVER', error);
+                    return res.json(objectError);
+                })
             }, error => {
                 console.log(error);
                 res.status(500);
-                let objectError = standardRes.objectError(400, 'INTERNAL_SERVER', error);
+                let objectError = standardRes.objectError(500, 'INTERNAL_SERVER', error);
                 return res.json(objectError);
             })
         }
+    },
+
+    getAllV2: (req, res, next) => {
+        let pageNum = req.query.pageNum;
+        let pageSize = req.query.pageSize;
+
+        let limitReq = pageSize;
+        let skipReq = pageNum * pageSize;
+        let statusReq = req.query.status;
+        postService.findAllV2(limitReq, skipReq, statusReq).then(result => {
+            if (result) {
+                let total = result.length ? result.length : 0;
+
+                arrPostBasic = [];
+
+                if (result.length) {
+                    result.forEach(post => {
+                        arrPostBasic.push(standardRes.postBasicRequest(post));
+                    })
+                }
+
+                let arrResponse = standardRes.arrResponse(total, arrPostBasic);
+                let objectSuccess = standardRes.objectSuccess(200, 'SUCCESS', arrResponse);
+                res.status(200);
+                return res.json(objectSuccess);
+            } else {
+                let objectSuccess = standardRes.objectSuccess(400, 'NO_OBJECT', {});
+                res.status(400);
+                return res.json(objectSuccess);
+            }
+        }, error => {
+            console.log(error);
+            res.status(500);
+            let objectError = standardRes.objectError(400, 'INTERNAL_SERVER', error);
+            return res.json(objectError);
+        })
     }
 }

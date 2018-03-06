@@ -46,6 +46,13 @@ module.exports = {
             orderBy: Joi.string().only('asc', 'desc').default('desc')
         }
     },
+    postFindV2:{
+        query: {
+            pageNum: Joi.number().min(0).default(0),
+            pageSize: Joi.number().min(1).max(100).default(10),
+            status:  Joi.string().only('SHOW', 'HIDDEN').default('SHOW')
+        }
+    },
     postFindOne: {
         // postId: Joi.objectId()
     },

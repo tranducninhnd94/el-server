@@ -11,5 +11,7 @@ router
     .post('/post', validate(reqValid.postInsert), userController.authenticate, postController.createPost)
     .put('/post/:postId', validate(reqValid.postUpdate),  userController.authenticate, postController.updatePost)
     .get('/post/detail/:postId', validate(reqValid.postFindOne), postController.getOne)
-    .get('/post/list', validate(reqValid.postFind), postController.getAll);
+    .get('/post/list', validate(reqValid.postFind), postController.getAll)
+    .get('/post/listV2', validate(reqValid.postFindV2), postController.getAllV2);
+
 module.exports = router;
