@@ -99,5 +99,23 @@ module.exports = {
 				return resolve(result);
 			});
 		});
+	},
+
+	updateListPostRead: (idUser, idPost) => {
+		return new Promise((resolve, reject) => {
+			User.update(
+				{
+					_id: idUser
+				},
+				{
+					$addToSet: {
+						list_posts_read: idPost
+					}
+				}
+			).exec((error, result) => {
+				if (error) return reject(error);
+				return resolve(result);
+			})
+		})
 	}
 };

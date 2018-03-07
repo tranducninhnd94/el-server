@@ -194,8 +194,69 @@ module.exports = {
         }, error => {
             console.log(error);
             res.status(500);
-            let objectError = standardRes.objectError(400, 'INTERNAL_SERVER', error);
+            let objectError = standardRes.objectError(500, 'INTERNAL_SERVER', error);
             return res.json(objectError);
         })
-    }
+    },
+
+    getAllPostUnread: (req, res, next) => {
+        let userInfo = req.user;// get userObject from token
+        let pageNum = req.query.pageNum;
+        let pageSize = req.query.pageSize;
+
+        let limitReq = pageSize;
+        let skipReq = pageNum * pageSize;
+        let statusReq = req.query.status;
+        if (userInfo) {
+            let userId = userInfo._id;
+            userService.findById(userId).then(userResult => {
+                if (userResult) {
+                    let arrPostRead = userResult.list_posts_read ? userResult.list_posts_read : [];
+                    postService.findUnread(limitReq, skipReq, statusReq, arrPostRead).then(result => {
+                        if (result) {
+                            let total = result.length ? result.length : 0;
+
+                            arrPostBasic = [];
+
+                            if (result.length) {
+                                result.forEach(post => {
+                                    arrPostBasic.push(standardRes.postBasicRequest(post));
+                                })
+                            }
+
+                            let arrResponse = standardRes.arrResponse(total, arrPostBasic);
+                            let objectSuccess = standardRes.objectSuccess(200, 'SUCCESS', arrResponse);
+                            res.status(200);
+                            return res.json(objectSuccess);
+                        } else {
+                            let objectError = standardRes.objectError(400, 'NO_OBJECT', {});
+                            res.status(400);
+                            return res.json(objectError);
+                        }
+                    }, error => {
+                        console.log(error);
+                        res.status(500);
+                        let objectError = standardRes.objectError(500, 'INTERNAL_SERVER', error);
+                        return res.json(objectError);
+                    })
+
+                } else {
+                    let objectError = standardRes.objectError(400, 'USER_NOT_EXIST', {});
+                    res.status(400);
+                    return res.json(objectError);
+                }
+            }, error => {
+                console.log(error);
+                res.status(500);
+                let objectError = standardRes.objectError(500, 'INTERNAL_SERVER', error);
+                return res.json(objectError);
+            })
+        } else {
+            res.status(403);
+            let objectError = standardRes.objectError(403, 'FORBIDDEN_TO_ACCESS', null);
+            return res.json(objectError);
+        }
+    },
+
+    
 }

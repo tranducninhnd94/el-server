@@ -1,4 +1,5 @@
 var userService = require("../_service/user.service"),
+	postService = require("../_service/post.service"),
 	Promise = require("promise"),
 	uuid = require("node-uuid"),
 	standardRes = require("../common/standard.res"),
@@ -221,6 +222,64 @@ module.exports = {
 			logger.log("error", TAG, "User not exist!");
 			res.status(400);
 			let objectError = standardRes.objectError(400, "USER_NOT_EXISTED", "User isn't existed !");
+			return res.json(objectError);
+		}
+	},
+
+	updateListPostReadOfUser: (req, res, next) => {
+		let user = req.user;
+		console.log('user : ', user);
+		if (user) {
+			let idUser = user._id;
+			let idPost = req.params.postId;
+			userService.updateListPostRead(idUser, idPost).then(result => {
+				next();
+			}, error => {
+				logger.log("error", TAG, "User not exist!");
+				res.status(400);
+				let objectError = standardRes.objectError(400, "USER_NOT_EXISTED", "User isn't existed !");
+				return res.json(objectError);
+			})
+		} else {
+			console.log('next : ');
+			next();
+		}
+	},
+
+	countPostUnread: (req, res, next) => {
+		let userInfo = req.user;// get userObject from token
+		if (userInfo) {
+			let userId = userInfo._id;
+			userService.findById(userId).then(userResult => {
+				if (userResult) {
+					let arrPostRead = userResult.list_posts_read ? userResult.list_posts_read : [];
+					postService.countUnread(arrPostRead).then(result => {
+
+						let objectSuccess = standardRes.objectSuccess(200, 'SUCCESS', result);
+						res.status(200);
+						return res.json(objectSuccess);
+
+					}, error => {
+						console.log(error);
+						res.status(500);
+						let objectError = standardRes.objectError(500, 'INTERNAL_SERVER', error);
+						return res.json(objectError);
+					})
+
+				} else {
+					let objectError = standardRes.objectError(400, 'USER_NOT_EXIST', {});
+					res.status(400);
+					return res.json(objectError);
+				}
+			}, error => {
+				console.log(error);
+				res.status(500);
+				let objectError = standardRes.objectError(500, 'INTERNAL_SERVER', error);
+				return res.json(objectError);
+			})
+		} else {
+			res.status(403);
+			let objectError = standardRes.objectError(403, 'FORBIDDEN_TO_ACCESS', null);
 			return res.json(objectError);
 		}
 	},

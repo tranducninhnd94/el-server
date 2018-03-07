@@ -252,6 +252,108 @@ module.exports = {
                 }
             )
         })
+    },
+
+    findUnread: (limitReq, skipReq, statusReq, arrPostIds) => {
+        return new Promise((resolve, reject) => {
+            Post.aggregate(
+                [
+                    {
+                        $match: {
+                            _id: { $nin: arrPostIds },
+                            status: statusReq
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: "users",
+                            localField: "user",
+                            foreignField: "_id",
+                            as: "creator"
+                        }
+                    },
+                    {
+                        $unwind: {
+                            path: "$creator",
+                            preserveNullAndEmptyArrays: true
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: "comments",
+                            localField: "_id",
+                            foreignField: "post",
+                            as: "comments"
+                        }
+                    },
+                    {
+                        $unwind: {
+                            path: "$comments",
+                            preserveNullAndEmptyArrays: true
+                        }
+                    },
+
+
+                    {
+                        $project: {
+                            "_id": 1,
+                            "file_upload": 1,
+                            "status": 1,
+                            "create_at": 1,
+                            "update_at": 1,
+                            "title": 1,
+                            "content": 1,
+                            "description": 1,
+                            "user._id": "$creator._id",
+                            "user.fullname": "$creator.fullname",
+                            "user.email": "$creator.email",
+                            "user.avatar_url": "$creator.avatar_url",
+                            "total_replies": { $ifNull: ["$comments.total_replies", 0] },
+                            "total_view": 1,
+                            "comments": { $cond: [{ $not: ["$comments"] }, 0, 1] }
+                        }
+                    },
+
+                    {
+                        $group: {
+                            _id: "$_id",
+                            file_upload: { $first: '$file_upload' },
+                            status: { $first: '$status' },
+                            create_at: { $first: '$create_at' },
+                            update_at: { $first: '$update_at' },
+                            title: { $first: '$title' },
+                            description: { $first: '$description' },
+                            content: { $first: '$content' },
+                            user: { $first: '$user' },
+                            total_view: { $first: "$total_view" },
+                            total_comment: { $sum: { $sum: ["$comments", "$total_replies"] } }
+                        }
+                    },
+                    {
+                        $sort: { total_view: -1, total_comment: -1, create_at: -1 }
+                    },
+
+                    { $skip: skipReq },
+                    {
+                        $limit: limitReq
+                    }
+
+                ], (err, result) => {
+                    if (err) return reject(err);
+                    resolve(result);
+                }
+            )
+        })
+    },
+
+    // count of post not include ids
+    countUnread: (arrId) => {
+        return new Promise((resolve, reject) => {
+            Post.count({ _id: { $nin: arrId } }, (error, total) => {
+                if (error) return reject(error);
+                return resolve(total);
+            })
+        })
     }
 
 }

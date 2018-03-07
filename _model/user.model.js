@@ -1,7 +1,7 @@
 var mongoose = require("mongoose"),
 	bcrypt = require("bcrypt-nodejs"),
 	Schema = mongoose.Schema;
-
+var Post = require('./post.model');
 var UserSchema = new Schema({
 	fullname: {
 		type: String,
@@ -73,7 +73,17 @@ var UserSchema = new Schema({
 	},
 	create_at: {
 		type: Date
-	}
+	},
+
+	list_posts_read: [
+		{
+			type: Schema.Types.ObjectId,
+			ref: "Post",
+			default: []
+		}
+	]
+
+
 });
 
 UserSchema.method.comparePassword = password => {

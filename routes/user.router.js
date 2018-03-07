@@ -8,6 +8,7 @@ router
 	.post("/user", validation(reqvalid.userInsert), userController.createUser)
 	// .post("/user/login", validation(reqvalid.userLogin), userController.login)
 	.post("/user/login", validation(reqvalid.userLogin), userController.loginV2)
-	.get("/user/logout", userController.authenticate, userController.logout);
+	.get("/user/logout", userController.authenticate, userController.logout)
+	.get("/user/count/post/unread", userController.authenticate, userController.countPostUnread);
 
 module.exports = router;
