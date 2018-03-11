@@ -7,11 +7,25 @@ module.exports = {
     HOST: "http://107.113.193.92:3000/",
 
     // socket event
-    SERVER_SEND_MESSAGE: "Server_send_message",
-    SERVER_SEND_USER_LIST: "Server_send_user_list",
 
-    CLIENT_SEND_MESSAGE: "Client_send_message",
-    CLIENT_SEND_INFO: "Client_send_info",
+    SERVER_PUBLIC_MESSAGE: "server-public-msg",
+
+    SERVER_PRIVATE_MESSAGE: "server-private-msg",
+
+    SERVER_SYSTEM_PUBLIC_MESSAGE: "server-system-msg",
+
+    CLIENT_PUBLIC_MESSAGE: "client-public-msg",
+
+    CLIENT_PRIVATE_MESSAGE: "client-private-msg",
+
+    CLIENT_INFORMATION: "client-information",
+
+    CLIENT_JOIN_ROOM: "client-join-room",
+
+    CLIENT_CREATE_ROOM: "client-create_room",
+
+    CLIENT_LEAVE_ROOM: "client-leave-room"
+
 
     // db.getCollection('posts').aggregate(
     //     [
@@ -42,8 +56,8 @@ module.exports = {
     //                 preserveNullAndEmptyArrays: true
     //             }
     //         },
-           
-            
+
+
     //         {
     //             $project:{
     //                 "_id": 1,
@@ -58,7 +72,7 @@ module.exports = {
     //                 "comments" : {$cond : [{$not: ["$comments"]}, 0, 1 ] }
     //                 }
     //         },
-           
+
     //          {
     //             $group:{
     //                 _id : "$_id",
@@ -72,10 +86,10 @@ module.exports = {
     //                 total_comment: {$sum :{ $sum: [ "$comments", "$total_replies" ] }}
     //             }
     //         }
-        
+
     //     ]
-    
-    
+
+
     // )
 
 }
