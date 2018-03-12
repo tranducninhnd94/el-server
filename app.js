@@ -41,7 +41,6 @@ app.use((req, res, next) => {
 		redisService.getObjectHash(token).then(
 			object => {
 				req.user = object;
-				console.log(object);
 				next();
 			},
 			error => {
@@ -50,7 +49,6 @@ app.use((req, res, next) => {
 			}
 		);
 	} else {
-		console.log("not include token..");
 		req.user = undefined;
 		next();
 	}

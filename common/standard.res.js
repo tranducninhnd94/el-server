@@ -104,7 +104,7 @@ module.exports = {
 
 	//posts
 
-	postResponse: (post) => {
+	postResponse: post => {
 		return {
 			_id: post._id,
 
@@ -123,10 +123,10 @@ module.exports = {
 			create_at: post.create_at ? post.create_at : null,
 
 			update_at: post.update_at ? post.update_at : null
-		}
+		};
 	},
 
-	postBasicRequest: (postBase) => {
+	postBasicRequest: postBase => {
 		return {
 			_id: postBase._id,
 
@@ -145,12 +145,11 @@ module.exports = {
 			create_at: postBase.create_at ? postBase.create_at : null,
 
 			update_at: postBase.update_at ? postBase.update_at : null
-
-		}
+		};
 	},
 
 	// comment
-	commentResponse: (comment) => {
+	commentResponse: comment => {
 		return {
 			_id: comment._id,
 
@@ -171,6 +170,30 @@ module.exports = {
 			create_at: comment.create_at,
 
 			update_at: comment.update_at
-		}
+		};
 	},
+
+	systemResponse: (rs, msg, value) => {
+		return {
+			result: rs,
+			message: msg,
+			value: value
+		};
+	},
+
+	gamerInfo: (gamerReq, is_owner, socket_id, game, name_room, character, is_die, is_view) => {
+		return {
+			_id: gamerReq._id,
+			socket_id: socket_id,
+			email: gamerReq.email,
+			fullname: gamerReq.fullname,
+			avatar_url: gamerReq.avatar_url,
+			is_owner: is_owner,
+			game: game,
+			name_room: name_room,
+			character: character,
+			is_die: is_die,
+			is_view: is_view
+		};
+	}
 };
