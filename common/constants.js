@@ -20,6 +20,12 @@ module.exports = {
 
 	SERVER_SEND_DETAIL_ROOM: "server-send-detail-room",
 
+	SERVER_START_GAME: "server-start-game-werewolf",
+
+	SERVER_SEND_INFO_FIRST_VOTE_BY_ROUNF: "server-send-info-fist-vote-by-round",
+
+	SERVER_SEND_ACTION : "server-send-action",
+
 	CLIENT_PUBLIC_MESSAGE: "client-public-msg",
 
 	CLIENT_PRIVATE_MESSAGE: "client-private-msg",
@@ -32,7 +38,17 @@ module.exports = {
 
 	CLIENT_LEAVE_ROOM: "client-leave-room",
 
-	CLIENT_SEND_NAME_ROOM: "client-send-name-room"
+	CLIENT_SEND_NAME_ROOM: "client-send-name-room",
+
+	CLIENT_START_GAME: "client-start-game-werewolf",
+
+	CLIENT_FIRST_VOTE: "client-first-vote",
+
+	CLIENT_GET_INFO_FIRST_VOTE_BY_ROUND: "client-get-info-fist-vote-by-round",
+
+	SERVER_SEND_COUND_DOWN: "server-send-cound-down",
+
+	CLIENT_SEND_ACTION : "client-send-action"
 
 	// db.getCollection('posts').aggregate(
 	//     [
