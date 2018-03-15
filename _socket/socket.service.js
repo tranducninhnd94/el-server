@@ -2,19 +2,14 @@ var constants = require("../common/constants");
 var stantdardRes = require("../common/standard.res");
 
 module.exports = io => {
-
-
 	// chacracter
 	// let wolf = {gamer , bite }
 
 	const action = ["BITE", "PROTECT", "PIN", "SAVE", "ENVENOM"];
-	let arrBite = [];
-	let arrProtect = [];
-	let arrPin = [];
-	let savedGamer = "";
-	let envenomGamer = "";
 
-	let historyOfRoom = [];
+	let arrHistoryOfRoom = [];
+
+	let msgGM = {};
 
 	/*
 		arrActionOfroom : [
@@ -123,6 +118,19 @@ module.exports = io => {
 
 	nspRoom.on("connection", socket => {
 		console.log("have connection join page room : ", socket.id);
+
+
+		socket.on(constants.CLIENT_GET_DETAIL_ROOM, (obj)=>{
+			let nameRoom = obj.nameRoom;
+
+			let room = arrRoom.find(obj => {
+				return obj.nameRoom == nameRoom;
+			});
+
+			let systemResponse = stantdardRes.systemResponse(200, "SUCCESS", room);
+
+			socket.emit(constants.SERVER_SEND_DETAIL_ROOM, systemResponse);
+		})
 
 		// GamerInfo {
 		//     gamer: GamerRequest
@@ -239,7 +247,7 @@ module.exports = io => {
 			}
 
 			// count down
-			inRound(nameRoom, 60);
+			inRound(nameRoom, 30);
 		});
 
 		// vote
@@ -272,7 +280,7 @@ module.exports = io => {
 						isVoted = 1;
 						return;
 					}
-				})
+				});
 
 				if (isVoted == 0) {
 					vote.arrVote.push(infoVote);
@@ -310,9 +318,21 @@ module.exports = io => {
 			let action = obj.action;
 			let nameRoom = obj.nameRoom;
 
+			let room = arrRoom.find(tmp => {
+				return (tmp.name_room = nameRoom);
+			});
 			let rs = arrActionOfRoom.find(tmp => {
 				return tmp.nameRoom == nameRoom;
-			})
+			});
+
+			if (character.is_fortuneteller) {
+				room.arrGamer.forEach(tmp => {
+					if (tmp._id == character._id) {
+						tmp.num_view = 0;
+						return;
+					}
+				});
+			}
 
 			if (rs) {
 				let isVote = 0;
@@ -323,49 +343,192 @@ module.exports = io => {
 						tmp.victim = victim;
 						return;
 					}
-				})
+				});
 				if (isVote == 0) {
 					rs.arrAction.push({ character, action, victim });
 				}
-				socket.emit(constants.SERVER_SEND_ACTION, { character, action, victim })
+				socket.emit(constants.SERVER_SEND_ACTION, { character, action, victim });
 			} else {
 				// first action
 				let arrAction = [{ character, action, victim }];
 				arrActionOfRoom.push({ nameRoom, arrAction });
 				// send info for client
-				socket.emit(constants.SERVER_SEND_ACTION, { character, action, victim })
+				socket.emit(constants.SERVER_SEND_ACTION, { character, action, victim });
 			}
+		});
 
+		socket.on(constants.CLIENT_GET_INFO_AFTER_NIGHT, obj => {
+			let nameRoom = obj.nameRoom;
+			calculatorEndOfNight(nameRoom);
+
+			socket.emit(
+				constants.SERVER_SEND_INFO_AFTER_NIGHT,
+				arrRoom.find(tmp => {
+					return tmp.name_room == nameRoom;
+				})
+			);
+		});
+
+		socket.on(constants.CLIENT_OPEN_FIRST_VOTE, (obj)=>{
+			let nameRoom = obj.nameRoom;
+			inFirstVote(nameRoom, 10); // 10 second
 		})
 
+		socket.on(constants.CLIENT_OPEN_SECOND_VOTE, (obj)=>{
+			let nameRoom = obj.nameRoom;
+			inSecondVote(nameRoom, 10); // 10 second
+		})
 	});
 
 	function calculatorEndOfNight(nameRoom) {
 		let rs = arrActionOfRoom.find(tmp => {
+			return tmp.nameRoom == nameRoom;
+		});
+
+		let room = arrRoom.find(tmp => {
+			return tmp.name_room == nameRoom;
+		});
+
+		// ghi log
+		let arrActionLog = rs.arrAction;
+		let arrDieLog = [];
+		let roundLog = 1;
+
+		let arrBite = [];
+		let arrProtect = [];
+		let arrPin = [];
+		let savedGamer;
+		let envenomGamer;
+		if (rs.arrAction)
+			rs.arrAction.forEach(tmp => {
+				if (tmp.action == "BITE") {
+					let rs = arrBite.find(tmp1 => {
+						return tmp1.victim._id == tmp.victim._id;
+					});
+					if (rs) {
+						rs.arrCharacters.push(tmp.chacracter);
+					} else {
+						arrBite.push({ arrCharacters: [tmp.character], victim: tmp.victim });
+					}
+				} else if (tmp.action == "PROTECT") {
+					arrProtect.push({ character: tmp.character, victim: tmp.victim });
+				} else if (tmp.action == "PIN") {
+					arrPin.push({ character: tmp.character, victim: tmp.victim });
+				} else if (tmp.action == "SAVE") {
+					savedGamer = { character: tmp.character, victim: tmp.victim };
+				} else if (tmp.action == "ENVENOM") {
+					envenomGamer = { character: tmp.character, victim: tmp.victim };
+				}
+			});
+
+		// giet thang bị bỏ độc
+		if (envenomGamer) {
+			room.arrGamer.forEach(tmp => {
+				if (tmp._id == envenomGamer.victim._id) {
+					tmp.is_die = true; // chết luôn
+					arrDieLog.push(envenomGamer.victim); // ghi log
+				}
+
+				// giảm số lần bỏ độc về 0
+				if (tmp._id === envenomGamer.chacracter._id) {
+					tmp.num_envenom = 0;
+				}
+			});
+		}
+
+		if (arrBite.length > 0) {
+			// find victim cadidate
+
+			let isContinue = true;
+
+			let candidate = {};
+			let max = 0;
+			let countMax = 0;
+			arrBite.forEach(tmp => {
+				let arrCharacters = tmp.arrCharacters;
+				let victim = tmp.victim;
+				if (arrCharacters.length > max) {
+					countMax = 0;
+					max = arrCharacters.length;
+					candidate = tmp;
+				}
+				if (arrCharacters.length == max) {
+					countMax++;
+				}
+			});
+
+			// có thằng bị cắn
+			if (max > 0 && countMax == 1) {
+				let arrCharacters = candidate.arrCharacters;
+				let victim = candidate.victim;
+
+				// kiểm tra có đc phù thủy cứu k
+				if (savedGamer) {
+					if (victim._id == savedGamer.victim._id) {
+						room.arrGamer.forEach(tmp => {
+							// giảm số lần cứu về 0
+							if (tmp._id === savedGamer.character._id) {
+								tmp.num_save = 0;
+							}
+						});
+						// continue end;// đc cứu
+						isContinue = false;
+					}
+				}
+				if (isContinue) {
+					isContinue = true;
+
+					// kiểm tra xem đc bảo vệ k
+					let rsPr = arrProtect.find(tmp => {
+						return tmp.victim._id == victim._id;
+					});
+
+					// được bảo vệ --> continue
+					if (rsPr) {
+						isContinue = false;
+					}
+
+					if (isContinue) {
+						// không đc bảo vệ --> tìm thằng bị ghim --> chết cùng
+						let rsPin = arrPin.find(tmp => {
+							return tmp.character._id == victim._id; // tìm thằng bị cắn mà là thợ săn
+						});
+
+						// có
+						if (rsPin) {
+							// giết thằng bị cắn và bị ghim
+							room.arrGamer.forEach(tmp => {
+								if (tmp._id == victim._id || tmp._id === rsPin.victim._id) {
+									tmp.is_die = true; // chết luôn
+									arrDieLog.push(tmp);
+								}
+							});
+						} else {
+							// chỉ giết thằng bị cắn
+							room.arrGamer.forEach(tmp => {
+								if (tmp._id == victim._id) {
+									tmp.is_die = true; // chết luôn
+									arrDieLog.push(tmp);
+								}
+							});
+						}
+					}
+				}
+			}
+		}
+
+		// ghi log
+		// arrHistory.push(history);
+		let historyOfRoom = arrHistoryOfRoom.find(tmp => {
 			return tmp.nameRoom = nameRoom;
-		})
+		});
 
-		rs.arrAction.forEach(tmp => {
-			if (tmp.action == "BITE") {
-				arrBite.push(tmp.victim);
-			}
-
-			if (tmp.action == "PROTECT") {
-				arrProtect.push(tmp.victim);
-			}
-
-			if (tmp.action == "PIN") {
-				arrPin.push(tmp.victim);
-			}
-
-			if (tmp.action == "SAVE") {
-				savedGamer.push(tmp.victim);
-			}
-
-			if (tmp.action == "ENVENOM") {
-				envenomGamer.push(tmp.victim);
-			}
-		})
+		if (historyOfRoom) {
+			roundLog = historyOfRoom.arrHistory.length + 1;
+			historyOfRoom.arrHistory.push({ roundLog, arrActionLog, arrDieLog });
+		} else {
+			arrHistoryOfRoom.push({ nameRoom, arrHistory: [{ roundLog, arrActionLog, arrDieLog }]});
+		}
 
 	}
 
@@ -449,6 +612,15 @@ function setRoleForGamer(obj, arrRoom) {
 			let pos = element.position;
 			let name = element.name;
 			room.arrGamer[pos].character = name;
+
+			if (name == "witch") {
+				room.arrGamer[pos].is_witch = true;
+				room.arrGamer[pos].num_envenom = 1;
+				room.arrGamer[pos].num_save = 1;
+			} else if (name == "fortuneteller") {
+				room.arrGamer[pos].is_fortuneteller = true;
+				room.arrGamer[pos].num_view = 1;
+			}
 		});
 	}
 
