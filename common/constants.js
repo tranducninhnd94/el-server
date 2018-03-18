@@ -54,11 +54,15 @@ module.exports = {
 
 	CLIENT_GET_INFO_AFTER_NIGHT: "client-get-info-after-noght",
 
-	CLIENT_GET_DETAIL_ROOM : "client-get-info-after-noght",
+	CLIENT_GET_DETAIL_ROOM: "client-get-info-after-noght",
 
 	CLIENT_OPEN_FIRST_VOTE: "client-open-first-vote",
 
-	CLIENT_OPEN_SECOND_VOTE : "client-open-second-vote",
+	CLIENT_OPEN_SECOND_VOTE: "client-open-second-vote",
+
+	CLIENT_NEXT_ROUND: "client-next-round",
+
+	CLIENT_GET_ALL_ROOM: "client-get-all-room"
 
 	// db.getCollection('posts').aggregate(
 	//     [

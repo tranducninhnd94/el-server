@@ -48,9 +48,13 @@ module.exports = io => {
 
 	let arrRoom = [];
 
-	let arrPublicMsg = [];
+	let arrPublicMsgOfRoom = [];
 
 	let arrPrivateMsg = [];
+
+	let arrMsgWerewolf = [];
+
+	let arrMsgHunter = [];
 
 	const arrCharacters = ["cupid", "fortuneteller", "huntsman", "sheriff", "townsfolk", "werewolf", "witch"];
 
@@ -61,6 +65,10 @@ module.exports = io => {
 
 		let arrRoomRes = stantdardRes.systemResponse(200, "SUCCESS", arrRoom);
 		socket.emit(constants.SERVER_GET_ALL_ROOM, arrRoomRes);
+
+		socket.on(constants.CLIENT_GET_ALL_ROOM, obj => {
+			socket.emit(constants.SERVER_GET_ALL_ROOM, arrRoomRes);
+		});
 
 		socket.on(constants.CLIENT_CREATE_ROOM, newRoom => {
 			console.log("event create room!");
@@ -119,8 +127,7 @@ module.exports = io => {
 	nspRoom.on("connection", socket => {
 		console.log("have connection join page room : ", socket.id);
 
-
-		socket.on(constants.CLIENT_GET_DETAIL_ROOM, (obj)=>{
+		socket.on(constants.CLIENT_GET_DETAIL_ROOM, obj => {
 			let nameRoom = obj.nameRoom;
 
 			let room = arrRoom.find(obj => {
@@ -130,7 +137,7 @@ module.exports = io => {
 			let systemResponse = stantdardRes.systemResponse(200, "SUCCESS", room);
 
 			socket.emit(constants.SERVER_SEND_DETAIL_ROOM, systemResponse);
-		})
+		});
 
 		// GamerInfo {
 		//     gamer: GamerRequest
@@ -191,6 +198,7 @@ module.exports = io => {
 					let character = null;
 					let is_die = false;
 					let is_view = false;
+					let socket_id = socket.id;
 					let tmp = stantdardRes.gamerInfo(
 						gamerInfo,
 						is_owner,
@@ -203,6 +211,10 @@ module.exports = io => {
 					);
 					// console.log("tmp undefined", tmp);
 					room.arrGamer.push(tmp);
+				} else {
+					temp.socket_id = socket.id;
+					console.log("tmp: ", temp.socket_id);
+					console.log("socket : ", socket.id);
 				}
 
 				let systemResponse = stantdardRes.systemResponse(200, "SUCCESS", room);
@@ -220,12 +232,80 @@ module.exports = io => {
 		// handle msg
 
 		socket.on(constants.CLIENT_PUBLIC_MESSAGE, obj => {
-			let publicMsg = obj.publicMsg;
+			let publicMsg = obj.objPublicMsg;
 			let nameRoom = obj.nameRoom;
-			arrPublicMsg.push(publicMsg);
 
-			let systemResponse = stantdardRes.systemResponse(200, "SUCCESS", arrPublicMsg);
+			let isExist = 0;
+
+			let publicMsgOfRoom = arrPublicMsgOfRoom.find(tmp => {
+				return (tmp.nameRoom = nameRoom);
+			});
+
+			if (publicMsgOfRoom) {
+				publicMsgOfRoom.arrPublicMsg.push(publicMsg);
+			} else {
+				publicMsgOfRoom = { nameRoom, arrPublicMsg: [publicMsg] };
+				arrPublicMsgOfRoom.push(publicMsgOfRoom);
+			}
+
+			let systemResponse = stantdardRes.systemResponse(200, "SUCCESS", publicMsgOfRoom.arrPublicMsg);
 			nspRoom.in(nameRoom).emit(constants.SERVER_PUBLIC_MESSAGE, systemResponse);
+		});
+
+		// let arrMsgWerewolf = [];
+
+		// let arrMsgHunter = [];
+		socket.on(constants.CLIENT_PRIVATE_MESSAGE, obj => {
+			let nameRoom = obj.nameRoom;
+			let privateMsg = obj.objPrivateMsg;
+			let character = obj.character;
+
+			let socketGroup = getGroupByCharacter(character, nameRoom);
+
+			if (character == "werewolf") {
+				let arrMsgWereOfRoom = arrMsgWerewolf.find(tmp => {
+					return tmp.nameRoom == nameRoom;
+				});
+
+				if (arrMsgWereOfRoom) {
+					arrMsgWereOfRoom.arrPrivateMsg.push(privateMsg);
+				} else {
+					arrMsgWereOfRoom = { nameRoom, arrPrivateMsg: [privateMsg] };
+					arrMsgWerewolf.push(arrMsgWereOfRoom);
+				}
+
+				console.log(io.nsps["/game/room"].adapter.rooms[nameRoom].sockets);
+
+				let systemResponse = stantdardRes.systemResponse(200, "SUCCESS", {arrPrivateMsg: arrMsgWereOfRoom.arrPrivateMsg, character});
+				// nspRoom.in(nameRoom).connected[socketGroup].emit(constants.SERVER_PRIVATE_MESSAGE, systemResponse);
+				// io.nsps["/game/room"].adapter.rooms[nameRoom].sockets.emit(
+				// 	constants.SERVER_PRIVATE_MESSAGE,
+				// 	systemResponse
+				// );
+				nspRoom.in(nameRoom).emit(constants.SERVER_PRIVATE_MESSAGE, systemResponse);
+				// nspRoom.in(nameRoom).connected[socketGroup[1]].emit(constants.SERVER_PRIVATE_MESSAGE, systemResponse);
+				// socketGroup.forEach(tmp=>{
+				// 	if (nspRoom.in(nameRoom).connected[tmp]){
+				// 		console.log(tmp);
+				// 		nspRoom.in(nameRoom).connected[tmp].emit(constants.SERVER_PRIVATE_MESSAGE, systemResponse);
+				// 	}
+				// })
+
+			} else if (character == "huntsman") {
+				let arrMsgHunterOfRoom = arrMsgHunter.find(tmp => {
+					return tmp.nameRoom == nameRoom;
+				});
+
+				if (arrMsgHunterOfRoom) {
+					arrMsgHunterOfRoom.arrPrivateMsg.push(privateMsg);
+				} else {
+					arrMsgHunterOfRoom = { nameRoom, arrPrivateMsg: [privateMsg] };
+					arrMsgHunter.push(arrMsgHunterOfRoom);
+				}
+				let systemResponse = stantdardRes.systemResponse(200, "SUCCESS", {arrPrivateMsg: arrMsgHunterOfRoom.arrPrivateMsg, character});
+				nspRoom.in(nameRoom).emit(constants.SERVER_PRIVATE_MESSAGE, systemResponse);
+				// nspRoom.in(nameRoom).connected[socketGroup[1]].emit(constants.SERVER_PRIVATE_MESSAGE, systemResponse);
+			}
 		});
 
 		socket.on(constants.CLIENT_START_GAME, info => {
@@ -369,16 +449,39 @@ module.exports = io => {
 			);
 		});
 
-		socket.on(constants.CLIENT_OPEN_FIRST_VOTE, (obj)=>{
+		socket.on(constants.CLIENT_OPEN_FIRST_VOTE, obj => {
 			let nameRoom = obj.nameRoom;
 			inFirstVote(nameRoom, 10); // 10 second
-		})
+		});
 
-		socket.on(constants.CLIENT_OPEN_SECOND_VOTE, (obj)=>{
+		socket.on(constants.CLIENT_OPEN_SECOND_VOTE, obj => {
 			let nameRoom = obj.nameRoom;
 			inSecondVote(nameRoom, 10); // 10 second
-		})
+		});
+
+		socket.on(constants.CLIENT_NEXT_ROUND, obj => {
+			let nameRoom = obj.nameRoom;
+			nextRound(obj);
+			inRound(nameRoom, 30);
+		});
 	});
+
+	function getGroupByCharacter(character, nameRoom) {
+		let arrSocketId = [];
+
+		let room = arrRoom.find(tmp => {
+			return tmp.name_room == nameRoom;
+		});
+		if (room)
+			if (room.arrGamer)
+				room.arrGamer.forEach(gamer => {
+					if (gamer.character == character) {
+						arrSocketId.push(gamer.socket_id);
+					}
+				});
+
+		return arrSocketId;
+	}
 
 	function calculatorEndOfNight(nameRoom) {
 		let rs = arrActionOfRoom.find(tmp => {
@@ -390,7 +493,7 @@ module.exports = io => {
 		});
 
 		// ghi log
-		let arrActionLog = rs.arrAction;
+		let arrActionLog = rs ? (rs.arrAction ? rs.arrAction : []) : [];
 		let arrDieLog = [];
 		let roundLog = 1;
 
@@ -399,27 +502,28 @@ module.exports = io => {
 		let arrPin = [];
 		let savedGamer;
 		let envenomGamer;
-		if (rs.arrAction)
-			rs.arrAction.forEach(tmp => {
-				if (tmp.action == "BITE") {
-					let rs = arrBite.find(tmp1 => {
-						return tmp1.victim._id == tmp.victim._id;
-					});
-					if (rs) {
-						rs.arrCharacters.push(tmp.chacracter);
-					} else {
-						arrBite.push({ arrCharacters: [tmp.character], victim: tmp.victim });
+		if (rs)
+			if (rs.arrAction)
+				rs.arrAction.forEach(tmp => {
+					if (tmp.action == "BITE") {
+						let rs = arrBite.find(tmp1 => {
+							return tmp1.victim._id == tmp.victim._id;
+						});
+						if (rs) {
+							rs.arrCharacters.push(tmp.character);
+						} else {
+							arrBite.push({ arrCharacters: [tmp.character], victim: tmp.victim });
+						}
+					} else if (tmp.action == "PROTECT") {
+						arrProtect.push({ character: tmp.character, victim: tmp.victim });
+					} else if (tmp.action == "PIN") {
+						arrPin.push({ character: tmp.character, victim: tmp.victim });
+					} else if (tmp.action == "SAVE") {
+						savedGamer = { character: tmp.character, victim: tmp.victim };
+					} else if (tmp.action == "ENVENOM") {
+						envenomGamer = { character: tmp.character, victim: tmp.victim };
 					}
-				} else if (tmp.action == "PROTECT") {
-					arrProtect.push({ character: tmp.character, victim: tmp.victim });
-				} else if (tmp.action == "PIN") {
-					arrPin.push({ character: tmp.character, victim: tmp.victim });
-				} else if (tmp.action == "SAVE") {
-					savedGamer = { character: tmp.character, victim: tmp.victim };
-				} else if (tmp.action == "ENVENOM") {
-					envenomGamer = { character: tmp.character, victim: tmp.victim };
-				}
-			});
+				});
 
 		// giet thang bị bỏ độc
 		if (envenomGamer) {
@@ -430,7 +534,7 @@ module.exports = io => {
 				}
 
 				// giảm số lần bỏ độc về 0
-				if (tmp._id === envenomGamer.chacracter._id) {
+				if (tmp._id === envenomGamer.character._id) {
 					tmp.num_envenom = 0;
 				}
 			});
@@ -520,16 +624,34 @@ module.exports = io => {
 		// ghi log
 		// arrHistory.push(history);
 		let historyOfRoom = arrHistoryOfRoom.find(tmp => {
-			return tmp.nameRoom = nameRoom;
+			return (tmp.nameRoom = nameRoom);
 		});
 
 		if (historyOfRoom) {
 			roundLog = historyOfRoom.arrHistory.length + 1;
 			historyOfRoom.arrHistory.push({ roundLog, arrActionLog, arrDieLog });
 		} else {
-			arrHistoryOfRoom.push({ nameRoom, arrHistory: [{ roundLog, arrActionLog, arrDieLog }]});
+			arrHistoryOfRoom.push({ nameRoom, arrHistory: [{ roundLog, arrActionLog, arrDieLog }] });
 		}
+	}
 
+	function nextRound(obj) {
+		// reset vote
+		let nameRoom = obj.nameRoom;
+
+		arrVote1.forEach(tmp => {
+			if (tmp.nameRoom == nameRoom) {
+				tmp.arrVote = [];
+			}
+		});
+
+		arrActionOfRoom.forEach(tmp => {
+			if (tmp.nameRoom == nameRoom) {
+				tmp.arrAction = [];
+			}
+		});
+
+		// reset
 	}
 
 	function inRound(nameRoom, ttl) {
